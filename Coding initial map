@@ -1,0 +1,64 @@
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <cmath>
+
+int main(){
+    int matrix[8][8] ={
+    {1,1,1,1,1,1,1,1},
+    {1,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,1},
+    {1,1,1,1,1,1,1,1}
+    };
+    
+    
+    
+    for (int i=0; i<8; i++){
+        for (int j=0; j<8; j++){
+    
+            
+            std::cout << matrix[i][j] << "";
+            }
+        std::cout << std::endl;
+    }
+    
+    srand(time(NULL));
+   
+   
+   int rr1 = rand() % 8;
+    int rc1 = rand() % 8;
+    int rr2 = rand() % 8;
+    int rc2 = rand() % 8;
+    
+   while ((abs(rr2-rr1)+abs(rc2-rc1))<2 || rr2 == 0 || rr2==7 || rr1==0 || rr1==7 || rc1 ==0 || rc1==7|| rc2 == 0|| rc2==7){
+   
+    rr1 = rand() % 8;
+    rc1 = rand() % 8;
+    rr2 = rand() % 8;
+    rc2 = rand() % 8;
+    
+    }
+    
+    
+    std::cout << "random numbers generated to spawn ppl\n";
+    std::cout << "Rrows \t" << "Rcolumns\n" << "1: "<< rr1<<"\t";
+    std::cout << rc1<<"\n";
+    std::cout << "2: " << rr2<<"\t";
+    std::cout<<  rc2<<"\n";
+    
+    
+    
+    
+    
+    return 0;
+    
+    
+    
+    
+}
+
+
