@@ -28,6 +28,20 @@ Imagine you generate a random position on a matrix, it will appear on the matrix
 
 To allow a generated npc to not be spawned within 2 nanonmeters to avoid instant combat, I use taxicab distance < 2, to maximize the game time. 
 Taxicab dist = abs(y2-y1)+abs(x2-x1)
-  
-  0 1 2 3 4 5
-0 
+(This does not account for any sort of diagonal distances. This is purely up, down, left, right.)
+For example:
+a is (2,2)
+b is (5,5)
+  0 1 2 3 4 5 6 7 
+0 1 1 1 1 1 1 1 1
+1 1 0 0 0 0 0 0 1
+2 1 0 a 0 0 0 0 1
+3 1 0 0 0 0 0 0 1
+4 1 0 0 0 0 0 0 1
+5 1 0 0 0 0 b 0 1
+6 1 0 0 0 0 0 0 1
+7 1 1 1 1 1 1 1 1
+the taxicab distance is: abs(5-2) + abs(5-2) which is 6.
+The distance between a and b is defined by 6 blocks.
+A single block is 1 dist across x or y. 
+
