@@ -1,8 +1,9 @@
+
 #include <iostream>
 #include <vector>
 #include <cstdlib>
 #include <cmath>
-
+#include <string>
 
 
 //map.
@@ -29,10 +30,11 @@ void displayMap(){
 }
 
 //intialized map. Shows the initial rv, then makes the rv 0.
-void initialMap(int &rr1, int &rc1){
+void initialMap(int &rr1, int &rc1, int &rr2, int &rc2){
     matrix[rr1][rc1]=2;
+    matrix[rr2][rc2]=2;
+
     displayMap();
-    matrix[rr1][rc1]=0;
 }
 
 //test for if a move is valid.
@@ -79,6 +81,13 @@ void moveSel(int &rowm, int &colm){
         }
         std::cout << "\nMove in a dir: ";
         std::cin >> mov; 
+        if (!std::cin) {
+            std::cin.clear();  // Clears the error flag
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Ignores the invalid input
+            std::cout << "Invalid input. Please enter a number.\n";
+            displayMap();
+            continue;  // Skips the rest of the loop and asks for input again
+        }
         if (up==true && mov == 3){
             matrix[rowm][colm]=0;
             rowm--;
@@ -136,46 +145,35 @@ void randPos(int &rr1, int &rc1, int &rr2, int &rc2) {
 
 
 int main(){
+    std::cout << "************************************\n";
+    std::cout << "Welcome to my infinite movement test\n";
+    std::cout << "************************************\n";
+    std::cout << "Enter start to begin: ";
+    while (true){
+        std::string s;
+        std::cin >> s;
+        if (s == "start"){
+            break;
+        }
+        else if (s == "START"){
+            break;
+        }
+        else{
+            std::cout << "Enter start to begin: ";
+        }
+    }
     int rr1;
     int rc1;
     int rr2;
     int rc2;
 
     randPos(rr1,rc1,rr2,rc2);
+    initialMap(rr1,rc1,rr2,rc2);
+    //outputs a map with a random position.
 
+    while (true){
+        moveSel(rr1,rc1);
+        displayMap();
+    }
 
-    initialMap(rr1,rc1);
-    
-    //advanced data.
-    int rv;
-    int ls;
-    int fs;
-    std::vector<int> pcpos = {rr1,rc1};
-    std::vector<int> mvpc = {rr1,rc1,rv};
-    std::vector<int> movs = {ls,fs};
-
-
-
-
-    moveSel(rr1,rc1);
-
-    displayMap();
-    std::cout << rr1;
-    std::cout << rc1;
-    moveSel(rr1,rc1);
-
-    displayMap();
-    std::cout << rr1;
-    std::cout << rc1;
-    moveSel(rr1,rc1);
-
-    displayMap();
-    std::cout << rr1;
-    std::cout << rc1;
-    moveSel(rr1,rc1);
-
-    displayMap();
-    std::cout << rr1;
-    std::cout << rc1;
-    return 0;
 }
