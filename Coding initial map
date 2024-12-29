@@ -100,7 +100,6 @@ void displayMap(){
     }
 }
 
-
 void randPos(int &rr1, int &rc1, int &rr2, int &rc2) {
     srand(time(NULL));
         rr1 = rand() % 8;
