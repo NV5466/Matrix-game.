@@ -5,6 +5,7 @@
 
 
 
+//map.
 int matrix[8][8] ={
     {1,1,1,1,1,1,1,1},
     {1,0,0,0,0,0,0,1},
@@ -15,11 +16,31 @@ int matrix[8][8] ={
     {1,0,0,0,0,0,0,1},
     {1,1,1,1,1,1,1,1}
 };
+//displays map.
+void displayMap(){
+    for (int i=0; i<8; i++){
+        for (int j=0; j<8; j++){
+    
+            
+            std::cout << matrix[i][j] << "";
+            }
+        std::cout << std::endl;
+    }
+}
 
+//intialized map. Shows the initial rv, then makes the rv 0.
+void initialMap(int &rr1, int &rc1){
+    matrix[rr1][rc1]=2;
+    displayMap();
+    matrix[rr1][rc1]=0;
+}
+
+//test for if a move is valid.
 bool isValidMove(int row, int col) {
     return row > 0 && row < 7 && col >0 && col < 7; 
 }
 
+//movement selection process.
 void moveSel(int &rowm, int &colm){
     bool up;
     bool right;
@@ -56,7 +77,7 @@ void moveSel(int &rowm, int &colm){
         else {
             left = false;
         }
-        std::cout << "\nMove in a dir";
+        std::cout << "\nMove in a dir: ";
         std::cin >> mov; 
         if (up==true && mov == 3){
             matrix[rowm][colm]=0;
@@ -83,23 +104,14 @@ void moveSel(int &rowm, int &colm){
             break;
         }
         else {
-            std::cout << "enter valid move.";
+            std::cout << "enter valid move.\n";
+            displayMap();
         }
     }
 
 }
 
-void displayMap(){
-    for (int i=0; i<8; i++){
-        for (int j=0; j<8; j++){
-    
-            
-            std::cout << matrix[i][j] << "";
-            }
-        std::cout << std::endl;
-    }
-}
-
+//random position generator.
 void randPos(int &rr1, int &rc1, int &rr2, int &rc2) {
     srand(time(NULL));
         rr1 = rand() % 8;
@@ -128,17 +140,13 @@ int main(){
     int rc1;
     int rr2;
     int rc2;
+
     randPos(rr1,rc1,rr2,rc2);
 
 
-    //sets rv to 2
-    matrix[rr1][rc1]=2;
-
-    //display the map
-    displayMap();
-    //sets rv to 0; for changing the value on movement step.
-    matrix[rr1][rc1]=0;
-
+    initialMap(rr1,rc1);
+    
+    //advanced data.
     int rv;
     int ls;
     int fs;
