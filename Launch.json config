@@ -1,0 +1,42 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build Testing.cpp",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "Testing.cpp",
+                "-o",
+                "Testing.exe"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Generated task to build Testing.cpp"
+        },
+        {
+            "label": "run Testing.exe",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "Testing.exe & pause"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "dependsOn": "build Testing.cpp",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        }
+    ]
+}
