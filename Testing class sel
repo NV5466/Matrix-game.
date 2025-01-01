@@ -6,7 +6,7 @@ class Sel {
     public:
     class clssSel {
         public:
-            int SelfspeedAdd;
+            int SelfspdAdd;
             int SelfdmgAdd;
             int SelfpwrAdd;
             class tactician{
@@ -16,7 +16,7 @@ class Sel {
                     int pwrAdd=3;
             };
             class assassin {
-                public: 
+                public:
                     int spdAdd=4;
                     int dmgAdd=5;
                     int pwrAdd=6;
@@ -26,7 +26,7 @@ class Sel {
                     int spdAdd=7;
                     int dmgAdd=8;
                     int pwrAdd=9;
-                
+
             };
 
             void askForClass() {
@@ -47,13 +47,13 @@ class Sel {
 
                 if (clss == "tactician"){
                     tactician valuet;
-                        SelfspeedAdd = valuet.spdAdd;
+                        SelfspdAdd = valuet.spdAdd;
                         SelfpwrAdd = valuet.pwrAdd;
                         SelfdmgAdd= valuet.dmgAdd;
                 }
                 else if (clss == "assassin"){
                     assassin valuea;
-                        SelfspeedAdd = valuea.spdAdd;
+                        SelfspdAdd = valuea.spdAdd;
                         SelfpwrAdd = valuea.pwrAdd;
                         SelfdmgAdd= valuea.dmgAdd;
                         assassin self;
@@ -63,7 +63,7 @@ class Sel {
                 }
                 else if (clss == "frdmFgter"){
                     frdmFgter valuef;
-                        SelfspeedAdd = valuef.spdAdd;
+                        SelfspdAdd = valuef.spdAdd;
                         SelfpwrAdd = valuef.pwrAdd;
                         SelfdmgAdd= valuef.dmgAdd;
                 }
@@ -72,27 +72,30 @@ class Sel {
 
     };
     class weaponSel{
-        public:
+    public:
             int SelfSpd;
             int SelfPwr;
             int SelfDmg;
             class sword{
-                int spd=1;
-                int pwr=2;
-                int dmg=3;
+            	public:
+					int spd=1;
+					int pwr=2;
+					int dmg=3;
 
-            }
+            };
             class knife{
-                int spd=4;
-                int pwr=5;
-                int dmg=6;
-            }
+            	public:
+					int spd=4;
+					int pwr=5;
+					int dmg=6;
+            };
             class axe{
-                int spd=7;
-                int pwr=8;
-                int dmg=9;
+            	public:
+					int spd=7;
+					int pwr=8;
+					int dmg=9;
 
-            }
+            };
             void askForWeapon(){
                 int dice;
                 std::string wpn;
@@ -110,22 +113,31 @@ class Sel {
                 ///start of wpn data collection
                 if (wpn == "sword"){
                     sword values;
-                        selfSpd = values.spd;
-                        selfDmg = values.dmg;
-                        selfPwr = values.pwr;
+                        SelfSpd = values.spd;
+                        SelfDmg = values.dmg;
+                        SelfPwr = values.pwr;
 
                 }
                 if (wpn == "knife"){
                     knife valuek;
-                        selfSpd = valuek.spd;
-                        selfDmg = valuek.dmg;
-                        selfPwr = valuek
+                        SelfSpd = valuek.spd;
+                        SelfDmg = valuek.dmg;
+                        SelfPwr = valuek.pwr;
                 }
                 if (wpn == "sword"){
                     sword values;
-                        selfSpd = values.spd;
+                        SelfSpd = values.spd;
+                        SelfDmg = values.dmg;
+                        SelfPwr = values.pwr;
                 }
             }
+
+    };
+    void fullSel(){
+    	weaponSel wpn;
+			wpn.askForWeapon();
+    	clssSel cls;
+			cls.askForClass();
     }
 
 };
@@ -133,9 +145,9 @@ class Sel {
 
 int main(){
     // This test checks to see if a class will be chosen automatically based on a roll or not.
-    // should be configurable in game I GUESS????? 
+    // should be configurable in game I GUESS?????
     Sel pc;
-        pc.askForClass();
+    	pc.fullSel();
     Sel c1;
-        c1.askForClass();
+        c1.fullSel();
 }
