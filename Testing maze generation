@@ -1,0 +1,167 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <cstdlib>
+#include <chrono>
+
+
+int Position(int x, int y){
+	return x;
+	return y;
+}
+//int move(int mx, int my){
+//}
+
+
+
+
+
+class mapStuff {
+	public:
+	std::vector<std::vector<int>> gameMap= {
+	        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+			{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+	    };
+	const std::vector<std::vector<bool>> valRanCheck= {
+		        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+				{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+		    };
+
+	void mapScour(){
+		for (int i = 0; i < gameMap.size(); i++) {
+		    for (int j = 0; j < gameMap[i].size(); j++){
+				std::cout << gameMap[i][j] << "";
+			}
+		}
+	}
+	void mapRand(){
+		bool valRan;
+		class blockRan {
+			public:
+
+
+
+		};
+
+
+	}
+	class blockRan{
+				public:
+					std::vector<std::vector<int> > block = {
+							{0,0,0},
+							{0,0,0},
+							{0,0,0}
+					};
+					std::string randMCard;
+					void blockChange(int Er,int Ec){
+						srand(time(NULL));
+						int cardRand= rand() % 2;
+						if (cardRand == 1){
+							randMCard = "row";
+						}
+						else{
+							randMCard = "col";
+						}
+						if (randMCard == "row"){
+							srand(time(NULL));
+							int i = rand() % 3;
+							block[i][0]=1;
+							block[i][1]=1;
+							block[i][2]=1;
+
+						}
+						else {
+							srand(time(NULL));
+							int j = rand() % 3;
+							block[0][j]=1;
+							block[1][j]=1;
+							block[2][j]=1;
+						}
+
+
+						gameMap[Er-1][Ec-1] = block[0][0];
+						gameMap[Er-1][Ec] = block[0][1];
+						gameMap[Er-1][Ec+1] = block[0][2];
+
+						gameMap[Er][Ec-1] = block[1][0];
+						gameMap[Er][Ec] = block[1][1];
+						gameMap[Er][Ec+1] = block[1][2];
+
+						gameMap[Er+1][Ec-1] = block[2][0];
+						gameMap[Er+1][Ec] = block[2][1];
+						gameMap[Er+1][Ec+1] = block[2][2];
+			};
+
+
+
+};
+
+
+
+int main(){
+	blockRan A;
+		A.blockChange(2,2);
+	blockRan B;
+		B.blockChange(2,5);
+	blockRan C;
+		C.blockChange(2,8);
+	blockRan D;
+		D.blockChange(2,11);
+	blockRan E;
+		E.blockChange(5,5);
+	blockRan F;
+		F.blockChange(5,11);
+	blockRan G;
+		G.blockChange(5,2);
+	blockRan H;
+		H.blockChange(5,5);
+	blockRan I;
+		I.blockChange(8,11);
+	blockRan J;
+		J.blockChange(8,2);
+	blockRan K;
+		K.blockChange(8,5);
+	blockRan L;
+		L.blockChange(8,11);
+	blockRan M;
+		M.blockChange(11,11);
+	blockRan N;
+		N.blockChange(11,2);
+	blockRan O;
+		O.blockChange(11,5);
+	blockRan P;
+		P.blockChange(11,11);
+
+
+return 0;
+}
+
+
+
+
+
+
