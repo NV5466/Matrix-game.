@@ -1,0 +1,54 @@
+#include <iostream>
+#include <cstdlib>
+#include <chrono>
+#include <vector>
+#include <string>
+
+int main(){
+	class blockRan{
+		public:
+			std::vector<std::vector<int> > block = {
+					{0,0,0},
+					{0,0,0},
+					{0,0,0}
+			};
+			std::string randMCard;
+			void blockChange(){
+				srand(time(NULL));
+				int cardRand= rand() % 2;
+				if (cardRand == 1){
+					randMCard = "row";
+				}
+				else{
+					randMCard = "col";
+				}
+				if (randMCard == "row"){
+					srand(time(NULL));
+					int i = rand() % 3;
+					block[i][0]=1;
+					block[i][1]=1;
+					block[i][2]=1;
+				}
+				else {
+					srand(time(NULL));
+					int j = rand() % 3;
+					block[0][j]=1;
+					block[1][j]=1;
+					block[2][j]=1;
+				}
+				for (const auto& row : block) {
+				        for (const auto& element : row) {
+				            std::cout << element << " "; // Print elements in the row, separated by spaces
+				        }
+				        std::cout << std::endl; // Move to the next line after printing each row
+				    }
+			}
+	};
+	blockRan test;
+		test.blockChange();
+
+
+
+
+
+}
