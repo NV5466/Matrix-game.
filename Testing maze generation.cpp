@@ -44,16 +44,23 @@ public:
 
         if (randMCard == "row") {
             std::uniform_int_distribution<> rowDist(0, 2);
+            std::uniform_int_distribution<> holeDist(0, 2);
             int i = rowDist(gen); // Random row selection (0-2)
             block[i][0] = 1;
             block[i][1] = 1;
             block[i][2] = 1;
+            int k = holeDist(gen);
+            block[i][k]=0;
+            
         } else {
             std::uniform_int_distribution<> colDist(0, 2);
             int j = colDist(gen); // Random column selection (0-2)
             block[0][j] = 1;
             block[1][j] = 1;
             block[2][j] = 1;
+            int l = colDist(gen);
+            block[l][j]=0;
+            
         }
 
         // Update the game map with the new block placement
