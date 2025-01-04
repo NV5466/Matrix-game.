@@ -1,29 +1,11 @@
 #include <iostream>
-#include <string>
-#include <vector>
 #include <cstdlib>
-#include <chrono>
+#include <vector>
+#include <string>
 #include <random>
 
-std::vector<std::vector<int>> gameMap= {
-	        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-			{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-	    };
-
 class blockRan {
-public:
+    public:
     std::vector<std::vector<int>> block = {
         {0,0,0},
         {0,0,0},
@@ -32,7 +14,7 @@ public:
     std::string randMCard;
 
     // Randomized block change
-    void blockChange(int Er, int Ec, std::mt19937& gen) {
+    void blockChange(int Er, int Ec, std::mt19937& gen, std::vector<std::vector<int>>& V) {
         std::uniform_int_distribution<> dist(0, 1);  // Random 0 or 1
         int cardRand = dist(gen); // Generate 0 or 1 for row or column choice
 
@@ -62,59 +44,103 @@ public:
             block[l][j]=0;
             
         }
+        V[Er-1][Ec-1] = block[0][0];
+        V[Er-1][Ec] = block[0][1];
+        V[Er-1][Ec+1] = block[0][2];
 
-        // Update the game map with the new block placement
-        gameMap[Er-1][Ec-1] = block[0][0];
-        gameMap[Er-1][Ec] = block[0][1];
-        gameMap[Er-1][Ec+1] = block[0][2];
+        V[Er][Ec-1] = block[1][0];
+        V[Er][Ec] = block[1][1];
+        V[Er][Ec+1] = block[1][2];
 
-        gameMap[Er][Ec-1] = block[1][0];
-        gameMap[Er][Ec] = block[1][1];
-        gameMap[Er][Ec+1] = block[1][2];
+        V[Er+1][Ec-1] = block[2][0];
+        V[Er+1][Ec] = block[2][1];
+        V[Er+1][Ec+1] = block[2][2];
 
-        gameMap[Er+1][Ec-1] = block[2][0];
-        gameMap[Er+1][Ec] = block[2][1];
-        gameMap[Er+1][Ec+1] = block[2][2];
     }
+
 };
 
-// Function to print the game map
-void printGameMap(const std::vector<std::vector<int>>& gameMap) {
-    for (const auto& row : gameMap) {
-        for (const auto& element : row) {
-            std::cout << element << " "; // Print each element in the row, separated by space
+class mapGen {
+    public:
+    int ranNum(){
+        std::random_device rd;
+        std::mt19937 gen(rd());
+
+        std::uniform_int_distribution<int> dist(3,20);
+        int randNum = dist(gen);
+        while (randNum != 5 && randNum != 8 && randNum != 11 && randNum != 14 && randNum != 17 && randNum != 20){
+            randNum = dist(gen);
         }
-        std::cout << std::endl; // Move to the next line after each row
+        int mapSize = randNum;
+        std::cout << randNum<< "\n";
+        return mapSize;
     }
-}
+
+    class mapBase{
+        public:
+            std::vector<std::vector<int>> original;
+            void mapSizeAdd(int a) {
+                for (int i=0; i<a; i++){
+                    std::vector<int> row;
+                    for (int j=0; j<a; j++){
+                        
+                        if (j > 0 && j < a-1 && i > 0 && i < a-1){
+                            row.push_back(0);
+                        }
+                        else{
+                            row.push_back(1);
+                        }
+
+                        std::cout << row[j] << " ";
+                        if (j == a-1){
+                            std::cout << std::endl;
+                        }
+                    }
+                    original.push_back(row);
+                }
+            }
+        
+
+    };
+    void step1() {
+        
+        mapBase hi;
+        hi.mapSizeAdd(ranNum());
+        testBlock(mapSize, hi.original);
+    }
+    void testBlock(int c){
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<int> dist(3,20);
+        int val = dist(gen);
+        blockRan hah;
+        for (int i = 0; i < c; i++){
+            for (int j = 0; j<c; j++){
+                if ((i+1) % 3 == 0 || (j+1) % 3 == 0){
+                    hah.blockChange(i,j,gen,original);
+                }
+            }
+        }
+    }
+
+
+};
+class mapFun{
+    public:
+        int testBlock;
+
+
+};
+
+
+
 
 int main() {
-    std::random_device rd;
-    std::mt19937 gen(rd());  // Random number generator, seeded once
-
-    // Create blockRan objects
-    blockRan A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P;
-
-    // Make random changes to the blocks at specified locations
-    A.blockChange(2, 2, gen);
-    B.blockChange(2, 5, gen);
-    C.blockChange(2, 8, gen);
-    D.blockChange(2, 11, gen);
-    E.blockChange(5, 5, gen);
-    F.blockChange(5, 11, gen);
-    G.blockChange(5, 2, gen);
-    H.blockChange(5, 5, gen);
-    I.blockChange(8, 11, gen);
-    J.blockChange(8, 2, gen);
-    K.blockChange(8, 5, gen);
-    L.blockChange(8, 11, gen);
-    M.blockChange(11, 11, gen);
-    N.blockChange(11, 2, gen);
-    O.blockChange(11, 5, gen);
-    P.blockChange(11, 11, gen);
-
-    // Print the game map
-    printGameMap(gameMap);
-
+    
+    mapGen a;
+    a.step1();
+    
+    
     return 0;
+
 }
