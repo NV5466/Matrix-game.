@@ -14,9 +14,10 @@ class blockRan {
     std::string randMCard;
 
     // Randomized block change
-    void blockChange(int Er, int Ec, std::mt19937& gen, std::vector<std::vector<int>>& V) {
+    void blockChange(int Er, int Ec, std::mt19937& gen, std::vector<std::vector<int>> & V) {
         std::uniform_int_distribution<> dist(0, 1);  // Random 0 or 1
         int cardRand = dist(gen); // Generate 0 or 1 for row or column choice
+        if (Er - 1 >= 0 && Er + 1 < V.size() && Ec - 1 >= 0 && Ec + 1 < V[0].size()) {
 
         if (cardRand == 1) {
             randMCard = "row";
@@ -55,6 +56,7 @@ class blockRan {
         V[Er+1][Ec-1] = block[2][0];
         V[Er+1][Ec] = block[2][1];
         V[Er+1][Ec+1] = block[2][2];
+        }
 
     }
 
@@ -98,30 +100,73 @@ class mapGen {
                     }
                     original.push_back(row);
                 }
-            }
-        
-
-    };
-    void step1() {
-        
-        mapBase hi;
-        hi.mapSizeAdd(ranNum());
-        testBlock(mapSize, hi.original);
-    }
-    void testBlock(int c){
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<int> dist(3,20);
-        int val = dist(gen);
-        blockRan hah;
-        for (int i = 0; i < c; i++){
-            for (int j = 0; j<c; j++){
-                if ((i+1) % 3 == 0 || (j+1) % 3 == 0){
-                    hah.blockChange(i,j,gen,original);
+                std::random_device rd;
+                std::mt19937 gen(rd());
+                std::uniform_int_distribution<int> dist(3,20);
+                int val = dist(gen);
+                blockRan hah;
+                for (int i = 0; i < a; i++){
+                    for (int j = 0; j<a; j++){
+                        if (i==2 || i==5 || i==8){
+                            switch(j){
+                                case(2):
+                                    hah.blockChange(i,j,gen,original);
+                                    break;
+                                case(5):
+                                    hah.blockChange(i,j,gen,original);
+                                    break;
+                                case(8):
+                                    hah.blockChange(i,j,gen,original);
+                                    break;
+                            }
+                        }
+                        
+                        
+                    }
+                }
+            
+        }
+        void displayMap(int a){
+            for (int i=0; i<a; i++){
+                std::vector<int> row;
+                for (int j=0; j<a; j++){                            
+                    if (j > 0 && j < a-1 && i > 0 && i < a-1){
+                        row.push_back(0);
+                    }
+                    else{
+                        row.push_back(1);
+                    }
+                    std::cout << row[j] << " ";
+                    if (j == a-1){
+                        std::cout << std::endl;
+                    }
                 }
             }
         }
+
+    };
+
+    void step1() {
+        
+        mapBase hi;
+        int d = ranNum();
+        hi.mapSizeAdd(d);
+        hi.displayMap(d);
     }
+    //void testBlock(int c){
+    //    std::random_device rd;
+    //    std::mt19937 gen(rd());
+    //    std::uniform_int_distribution<int> dist(3,20);
+    //    int val = dist(gen);
+    //    blockRan hah;
+    //    for (int i = 0; i < c; i++){
+    //        for (int j = 0; j<c; j++){
+    //            if (i+1 % 3 == 0 || j+1 % 3 == 0){
+    //                hah.blockChange(i,j,gen);
+    //            }
+    //        }
+    //    }
+    //}
 
 
 };
@@ -133,14 +178,12 @@ class mapFun{
 };
 
 
-
-
 int main() {
     
     mapGen a;
     a.step1();
     
-    
+
     return 0;
 
 }
