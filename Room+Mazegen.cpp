@@ -10,7 +10,7 @@ int GRInt(int min, int max){
 
 }
 
-//Testing pass by reference for a randomization for the map.
+//This class is for accessing members used for randomizing parts of a map room.
 class blockRand2{
     public:
 
@@ -253,7 +253,7 @@ class mazeData {
 
 };
 
-
+//This is for debugging. I dont have a use yet.
 void initalization(){
 
 }
@@ -266,13 +266,16 @@ int main(){
     std::cout<< h.mapSize;
     blockRand2 l;
     l.workingCombo(h.map, h.mapSize);
+    
+
+    std::vector<int>> map1 = map;
+    
 
     for (unsigned int i=0; i<h.map.size(); i++){
         for (unsigned int j=0; j<h.map[i].size(); j++){
-            std::cout<<h.map[i][j]<< " ";
+            std::cout<<h.map1[i][j]<< " ";
         }
         std::cout << std::endl;
     }
-
 
 }
