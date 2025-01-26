@@ -2,6 +2,8 @@
 #include <vector>
 #include <random>
 #include <algorithm>
+#include <SDL2/SDL.h>
+
 
 
 // Number generation class
@@ -78,6 +80,9 @@ class roomGen{
             //    std::cout << std::endl;
             //}
             //Debug for block func
+
+
+            // var y is the 2D vector to change
         void workingCombo(std::vector<std::vector<int>>& y, int size){
             switch(size){
                 case(3):
@@ -90,15 +95,19 @@ class roomGen{
                     change(y,blockRandiC2(),5,5);
                     break;
                 case(9):   
+
                     change(y,blockRandiC2(),2,2);
                     change(y,blockRandiC2(),2,5);
                     change(y,blockRandiC2(),2,8);
+
                     change(y,blockRandiC2(),5,2);
                     change(y,blockRandiC2(),5,5);
                     change(y,blockRandiC2(),5,8);
+
                     change(y,blockRandiC2(),8,2);
                     change(y,blockRandiC2(),8,5);
                     change(y,blockRandiC2(),8,8);
+
                     break;
                 case(12):
                     change(y,blockRandiC2(),2,2);
@@ -278,6 +287,7 @@ class roomGen{
     void initalization(){
 
     }
+
     void creatMap(std::vector<std::vector<int>>& map){
         mazeData h;
         blockRand2 l;
@@ -288,7 +298,7 @@ class roomGen{
         l.workingCombo(map, h.mpSize);
         
 
-        std::cout<< h.mpSize;
+        std::cout<< h.mpSize << "\n" << std::endl;
     }
 
 };
@@ -307,6 +317,8 @@ class charData{
 class worldData{
     public:
         std::vector<std::vector<std::vector<int>>> worldVector;
+        std::string worldSize;
+        
 };
 
 
@@ -328,22 +340,17 @@ class worldGen{
         std::vector<std::vector<int>> map10;
         std::vector<std::vector<int>> map11;
         std::vector<std::vector<int>> map12;
-        std::string worldSize;
 
-        void playerInputInitialization(){
-            std::cout << "Choose a world size: ";
-            std::cin >> worldSize;
-            std::transform(worldSize.begin(),worldSize.end(),worldSize.begin(),::tolower);
-        }
+        
         void worldCreation(std::string ws){
 
             if (ws == "small"){
                 rGen.creatMap(map1);
                 rGen.creatMap(map2);
                 rGen.creatMap(map3);
-                worldVector.push_back(map1);
-                worldVector.push_back(map2);
-                worldVector.push_back(map3);
+                wData.worldVector.push_back(map1);
+                wData.worldVector.push_back(map2);
+                wData.worldVector.push_back(map3);
                 
             }
             else if(ws == "medium"){
@@ -353,12 +360,12 @@ class worldGen{
                 rGen.creatMap(map4);
                 rGen.creatMap(map5);
                 rGen.creatMap(map6);
-                worldVector.push_back(map1);
-                worldVector.push_back(map2);
-                worldVector.push_back(map3);
-                worldVector.push_back(map4);
-                worldVector.push_back(map5);
-                worldVector.push_back(map6);
+                wData.worldVector.push_back(map1);
+                wData.worldVector.push_back(map2);
+                wData.worldVector.push_back(map3);
+                wData.worldVector.push_back(map4);
+                wData.worldVector.push_back(map5);
+                wData.worldVector.push_back(map6);
             }
             else if(ws == "large"){
                 rGen.creatMap(map1);
@@ -370,15 +377,15 @@ class worldGen{
                 rGen.creatMap(map7);
                 rGen.creatMap(map8);
                 rGen.creatMap(map9);
-                worldVector.push_back(map1);
-                worldVector.push_back(map2);
-                worldVector.push_back(map3);
-                worldVector.push_back(map4);
-                worldVector.push_back(map5);
-                worldVector.push_back(map6);
-                worldVector.push_back(map7);
-                worldVector.push_back(map8);
-                worldVector.push_back(map9);
+                wData.worldVector.push_back(map1);
+                wData.worldVector.push_back(map2);
+                wData.worldVector.push_back(map3);
+                wData.worldVector.push_back(map4);
+                wData.worldVector.push_back(map5);
+                wData.worldVector.push_back(map6);
+                wData.worldVector.push_back(map7);
+                wData.worldVector.push_back(map8);
+                wData.worldVector.push_back(map9);
             }
             else if(ws == "extra large"){
                 rGen.creatMap(map1);
@@ -393,25 +400,109 @@ class worldGen{
                 rGen.creatMap(map10);
                 rGen.creatMap(map11);
                 rGen.creatMap(map12);
-                worldVector.push_back(map1);
-                worldVector.push_back(map2);
-                worldVector.push_back(map3);
-                worldVector.push_back(map4);
-                worldVector.push_back(map5);
-                worldVector.push_back(map6);
-                worldVector.push_back(map7);
-                worldVector.push_back(map8);
-                worldVector.push_back(map9);
-                worldVector.push_back(map10);
-                worldVector.push_back(map11);
-                worldVector.push_back(map12);
+                wData.worldVector.push_back(map1);
+                wData.worldVector.push_back(map2);
+                wData.worldVector.push_back(map3);
+                wData.worldVector.push_back(map4);
+                wData.worldVector.push_back(map5);
+                wData.worldVector.push_back(map6);
+                wData.worldVector.push_back(map7);
+                wData.worldVector.push_back(map8);
+                wData.worldVector.push_back(map9);
+                wData.worldVector.push_back(map10);
+                wData.worldVector.push_back(map11);
+                wData.worldVector.push_back(map12);
             }
             else{
+                std::cout<<"ERROR. UNDEFINED WORLD SIZE. PLEASE GO TO (class worldGen/worldCreation) TO FIND A FIX.";
             };
         }
 };
 
+//iGD stands for initializing game data.
+class iGD{
+    public:
+    numberGen numGen;
+    roomGen rmGen;
+    worldData wData;
+    worldGen wrldGen;
+
+        void playerInputWorldSizeInitialization(){
+            while (true){
+                std::cout << "Choose a world size: small. medium, large, or extra large: " << "[";
+                std::cin >> wData.worldSize;
+                std::transform(wData.worldSize.begin(),wData.worldSize.end(),wData.worldSize.begin(),::tolower);
+                wrldGen.worldCreation(wData.worldSize);
+                if (wData.worldSize=="small"){
+                    wData.worldVector.push_back(wrldGen.map1);
+                    wData.worldVector.push_back(wrldGen.map2);
+                    wData.worldVector.push_back(wrldGen.map3);
+                    break;
+                }
+                else if (wData.worldSize=="medium"){
+                    wData.worldVector.push_back(wrldGen.map1);
+                    wData.worldVector.push_back(wrldGen.map2);
+                    wData.worldVector.push_back(wrldGen.map3);
+                    wData.worldVector.push_back(wrldGen.map4);
+                    wData.worldVector.push_back(wrldGen.map5);
+                    wData.worldVector.push_back(wrldGen.map6);
+                    break;
+                }
+                else if (wData.worldSize=="large"){
+                    wData.worldVector.push_back(wrldGen.map1);
+                    wData.worldVector.push_back(wrldGen.map2);
+                    wData.worldVector.push_back(wrldGen.map3);
+                    wData.worldVector.push_back(wrldGen.map4);
+                    wData.worldVector.push_back(wrldGen.map5);
+                    wData.worldVector.push_back(wrldGen.map6);
+                    wData.worldVector.push_back(wrldGen.map7);
+                    wData.worldVector.push_back(wrldGen.map8);
+                    wData.worldVector.push_back(wrldGen.map9);
+                    break;
+                }
+                else if (wData.worldSize=="extra large"){
+                    wData.worldVector.push_back(wrldGen.map1);
+                    wData.worldVector.push_back(wrldGen.map2);
+                    wData.worldVector.push_back(wrldGen.map3);
+                    wData.worldVector.push_back(wrldGen.map4);
+                    wData.worldVector.push_back(wrldGen.map5);
+                    wData.worldVector.push_back(wrldGen.map6);
+                    wData.worldVector.push_back(wrldGen.map7);
+                    wData.worldVector.push_back(wrldGen.map8);
+                    wData.worldVector.push_back(wrldGen.map9);
+                    wData.worldVector.push_back(wrldGen.map10);
+                    wData.worldVector.push_back(wrldGen.map11);
+                    wData.worldVector.push_back(wrldGen.map12);
+                    break;
+                }
+                else{
+                    std::cout<<"Please input valid size" << std::endl;
+                }
+            }
+        }
+
+
+};
+
 int main(){
-    std::cout<< "Choose a world size";
+    iGD initial;
+    numberGen numGen;
+    roomGen rmGen;
+    worldData wData;
+    worldGen wrldGen;
     
+    initial.playerInputWorldSizeInitialization();
+     for (size_t mapIndex = 0; mapIndex < initial.wData.worldVector.size(); ++mapIndex) {
+        std::cout << "Map " << mapIndex + 1 << ":\n";
+
+        for (const auto& row : initial.wData.worldVector[mapIndex]) {
+            for (int cell : row) {
+                std::cout << cell << " ";
+            }
+            std::cout << "\n";
+        }
+
+        std::cout << "-----------------------\n";
+    }
+    return 0;
 }
