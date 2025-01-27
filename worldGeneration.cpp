@@ -11,19 +11,24 @@ class numberGen {
     public:
         numberGen() : engine(std::random_device{}()) {}
 
-        int GRInt(int min, int max) {
+        unsigned int GRInt(int min, int max) {
             std::uniform_int_distribution<int> dist(min, max);
             return dist(engine);
         }
 
         int SizeCorr(int m, int min, int max) {
-            while (true) {
+            if (min > max || min < 0 || m <= 0) {
+                throw std::invalid_argument("Invalid arguments for SizeCorr.");
+            }
+            for (int i = 0; i < 1000; ++i) {
                 int size = GRInt(min, max);
                 if (size % m == 0) {
                     return size;
                 }
             }
+            throw std::runtime_error("Failed to generate a valid size.");
         }
+
 
     private:
         std::mt19937 engine; // Persistent random engine
@@ -83,62 +88,25 @@ class roomGen{
 
 
             // var y is the 2D vector to change
-        void workingCombo(std::vector<std::vector<int>>& y, int size){
-            switch(size){
-                case(3):
-                    change(y,blockRandiC2(),2,2);
-                    break;
-                case(6):
-                    change(y,blockRandiC2(),2,2);
-                    change(y,blockRandiC2(),2,5);
-                    change(y,blockRandiC2(),5,2);
-                    change(y,blockRandiC2(),5,5);
-                    break;
-                case(9):   
-
-                    change(y,blockRandiC2(),2,2);
-                    change(y,blockRandiC2(),2,5);
-                    change(y,blockRandiC2(),2,8);
-
-                    change(y,blockRandiC2(),5,2);
-                    change(y,blockRandiC2(),5,5);
-                    change(y,blockRandiC2(),5,8);
-
-                    change(y,blockRandiC2(),8,2);
-                    change(y,blockRandiC2(),8,5);
-                    change(y,blockRandiC2(),8,8);
-
-                    break;
-                case(12):
-                    change(y,blockRandiC2(),2,2);
-                    change(y,blockRandiC2(),2,5);
-                    change(y,blockRandiC2(),2,8);
-                    change(y,blockRandiC2(),2,11);
-
-                    change(y,blockRandiC2(),5,2);
-                    change(y,blockRandiC2(),5,5);
-                    change(y,blockRandiC2(),5,8);
-                    change(y,blockRandiC2(),5,11);
-
-                    change(y,blockRandiC2(),8,2);
-                    change(y,blockRandiC2(),8,5);
-                    change(y,blockRandiC2(),8,8);
-                    change(y,blockRandiC2(),8,11);
-
-                    change(y,blockRandiC2(),11,2);
-                    change(y,blockRandiC2(),11,5);
-                    change(y,blockRandiC2(),11,8);
-                    change(y,blockRandiC2(),11,11);
-                    break;
-                default:
-                    std::cout << "ERROR ERROR. UNDEFINED MAP SIZE. PLEASE GO TO class (blockRand2) to check for cause";
-                    break;
+        void workingCombo(std::vector<std::vector<int>>& y, int size) {
+            int grid = size / 3;
+            for (int row = 0; row < grid; ++row) {
+                for (int col = 0; col < grid; ++col) {
+                    change(y, blockRandiC2(), row * 3 + 2, col * 3 + 2);
+                }
             }
         }
 
+
         
         void change(std::vector<std::vector<int>>& x,std::vector<std::vector<int>> blk, unsigned int row, unsigned int col){
+            if (row < 1 || row >= x.size() - 1 || col < 1 || col >= x[0].size() - 1) {
+                std::cerr << "Invalid indices for change function." << std::endl;
+                return;
+            }
+            
             x[row-1][col-1] = blk[0][0];
+            
             x[row-1][col] = blk[0][1];
             x[row-1][col+1] = blk[0][2];
 
@@ -259,20 +227,15 @@ class roomGen{
         //Empty map vector.^^^
         //
 
-        void mpCreate(std::vector<std::vector<int>>& mp){
-            std::vector<int> row;
-            for(int i=0; i<mpSize+2; i++){
-                row.clear();
-                for(int j=0; j<mpSize+2; j++){
-                    if(i==0 || i==mpSize+1 || j==0 || j==mpSize+1){
-                        row.push_back(1);
-                    }
-                    else{
-                        row.push_back(0);
+        void mpCreate(std::vector<std::vector<int>>& mp) {
+                mp.resize(mpSize + 2, std::vector<int>(mpSize + 2, 0));
+                for (int i = 0; i < mpSize + 2; i++) {
+                    for (int j = 0; j < mpSize + 2; j++) {
+                        if (i == 0 || i == mpSize + 1 || j == 0 || j == mpSize + 1) {
+                            mp[i][j] = 1;
+                        }
                     }
                 }
-                mp.push_back(row);
-            }
         }
         //Map gen ^^^^^^^
 
@@ -318,10 +281,18 @@ class worldData{
     public:
         std::vector<std::vector<std::vector<int>>> worldVector;
         std::string worldSize;
+        //VVVVVVVVVVVVV
+        //small=3;
+        //medium=6;
+        //large=9;
+        //extra_large=12;
+        //VVVVVVVVVVVVV
+        int worldSizeNum;
+        
         
 };
 
-
+//generation of world(3-12 rooms)
 class worldGen{
     public:
     numberGen nGen;
@@ -426,7 +397,7 @@ class iGD{
     roomGen rmGen;
     worldData wData;
     worldGen wrldGen;
-
+        //player inputs world size.
         void playerInputWorldSizeInitialization(){
             while (true){
                 std::cout << "Choose a world size: small. medium, large, or extra large: " << "[";
@@ -437,6 +408,7 @@ class iGD{
                     wData.worldVector.push_back(wrldGen.map1);
                     wData.worldVector.push_back(wrldGen.map2);
                     wData.worldVector.push_back(wrldGen.map3);
+                    wData.worldSizeNum=3;
                     break;
                 }
                 else if (wData.worldSize=="medium"){
@@ -446,6 +418,7 @@ class iGD{
                     wData.worldVector.push_back(wrldGen.map4);
                     wData.worldVector.push_back(wrldGen.map5);
                     wData.worldVector.push_back(wrldGen.map6);
+                    wData.worldSizeNum=6;
                     break;
                 }
                 else if (wData.worldSize=="large"){
@@ -458,6 +431,7 @@ class iGD{
                     wData.worldVector.push_back(wrldGen.map7);
                     wData.worldVector.push_back(wrldGen.map8);
                     wData.worldVector.push_back(wrldGen.map9);
+                    wData.worldSizeNum=9;
                     break;
                 }
                 else if (wData.worldSize=="extra large"){
@@ -473,6 +447,7 @@ class iGD{
                     wData.worldVector.push_back(wrldGen.map10);
                     wData.worldVector.push_back(wrldGen.map11);
                     wData.worldVector.push_back(wrldGen.map12);
+                    wData.worldSizeNum=12;
                     break;
                 }
                 else{
@@ -480,22 +455,13 @@ class iGD{
                 }
             }
         }
-
-
-};
-
-int main(){
-    iGD initial;
-    numberGen numGen;
-    roomGen rmGen;
-    worldData wData;
-    worldGen wrldGen;
-    
-    initial.playerInputWorldSizeInitialization();
-     for (size_t mapIndex = 0; mapIndex < initial.wData.worldVector.size(); ++mapIndex) {
+        //generation+display.
+        void worldGeneration(){
+            playerInputWorldSizeInitialization();
+     for (size_t mapIndex = 0; mapIndex < wData.worldVector.size(); ++mapIndex) {
         std::cout << "Map " << mapIndex + 1 << ":\n";
 
-        for (const auto& row : initial.wData.worldVector[mapIndex]) {
+        for (const auto& row : wData.worldVector[mapIndex]) {
             for (int cell : row) {
                 std::cout << cell << " ";
             }
@@ -504,5 +470,41 @@ int main(){
 
         std::cout << "-----------------------\n";
     }
+        }
+        //
+        //Player spawns
+
+        void spawn(){
+            while(true){
+                int room=numGen.GRInt(0,wData.worldSizeNum);
+                    std::vector<std::vector<int>> roomSpawn=wData.worldVector[room];
+                    int rowSpawnMax=roomSpawn.size();
+                    int randrow=numGen.GRInt(0,rowSpawnMax);
+                    std::vector<int> row=wData.worldVector[room][randrow];
+                    int pos = numGen.GRInt(0,roomSpawn.size());
+                    std::vector<int> location = {room,randrow,pos};
+                    if (wData.worldVector[room][randrow][pos]==0){
+                        std::cout << room << std::endl;
+                        std::cout << randrow << std::endl;
+                        std::cout<<pos<<std::endl;
+                        break;
+                    }
+
+
+            }
+        }
+};
+
+int main(int argc, char *argv[]){
+    iGD initial;
+    numberGen numGen;
+    roomGen rmGen;
+    worldData wData;
+    worldGen wrldGen;
+    
+    //generates the world
+    initial.worldGeneration();
+    initial.spawn();
+
     return 0;
 }
