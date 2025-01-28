@@ -20,7 +20,7 @@ class numberGen {
             if (min > max || min < 0 || m <= 0) {
                 throw std::invalid_argument("Invalid arguments for SizeCorr.");
             }
-            for (int i = 0; i < 1000; ++i) {
+            for (int i = 0; i < 100000000000000000000000000000000000000; ++i) {
                 int size = GRInt(min, max);
                 if (size % m == 0) {
                     return size;
@@ -104,7 +104,7 @@ class roomGen{
                 std::cerr << "Invalid indices for change function." << std::endl;
                 return;
             }
-            
+
             x[row-1][col-1] = blk[0][0];
             
             x[row-1][col] = blk[0][1];
@@ -292,6 +292,27 @@ class worldData{
         
 };
 
+
+
+
+
+class positionData{
+    public:
+        std::vector<int> position = {0,0,0};
+        std::vector<std::vector<int>> positionHistory;
+        void posTrack(){
+            positionHistory.push_back(position);
+        }
+        void posTrackDisplay(int time){
+            for (int i=0; i<positionHistory[time].size(); i++){
+                std::cout << positionHistory[time][i];
+            }
+        }
+};
+
+
+
+
 //generation of world(3-12 rooms)
 class worldGen{
     public:
@@ -397,6 +418,7 @@ class iGD{
     roomGen rmGen;
     worldData wData;
     worldGen wrldGen;
+    positionData pData;
         //player inputs world size.
         void playerInputWorldSizeInitialization(){
             while (true){
@@ -459,7 +481,7 @@ class iGD{
         void worldGeneration(){
             playerInputWorldSizeInitialization();
      for (size_t mapIndex = 0; mapIndex < wData.worldVector.size(); ++mapIndex) {
-        std::cout << "Map " << mapIndex + 1 << ":\n";
+        std::cout << "Map " << mapIndex << ":\n";
 
         for (const auto& row : wData.worldVector[mapIndex]) {
             for (int cell : row) {
@@ -475,36 +497,44 @@ class iGD{
         //Player spawns
 
         void spawn(){
-            while(true){
-                int room=numGen.GRInt(0,wData.worldSizeNum);
-                    std::vector<std::vector<int>> roomSpawn=wData.worldVector[room];
-                    int rowSpawnMax=roomSpawn.size();
-                    int randrow=numGen.GRInt(0,rowSpawnMax);
-                    std::vector<int> row=wData.worldVector[room][randrow];
-                    int pos = numGen.GRInt(0,roomSpawn.size());
-                    std::vector<int> location = {room,randrow,pos};
-                    if (wData.worldVector[room][randrow][pos]==0){
-                        std::cout << room << std::endl;
-                        std::cout << randrow << std::endl;
-                        std::cout<<pos<<std::endl;
-                        break;
+            while (true) {
+                    int room = numGen.GRInt(0, wData.worldSizeNum);
+                    std::vector<std::vector<int>> roomSpawn = wData.worldVector[room];
+                    int rowSpawnMax = roomSpawn.size();
+
+                    if (rowSpawnMax == 0) {
+                        continue; // Skip if no rows exist in the room
                     }
 
+                    // Ensure randrow is within bounds
+                    int randrow = numGen.GRInt(0, rowSpawnMax - 1);
+                    std::vector<int> row = wData.worldVector[room][randrow];
 
+                    int pos = numGen.GRInt(0, row.size() - 1);  // Ensure pos is within row bounds
+
+                    if (wData.worldVector[room][randrow][pos] == 0) {
+                        std::cout << room << " " << randrow << " " <<  pos << std::endl;
+                        //sets 2D position vector to spawn location
+                        pData.position[0]=room;
+                        pData.position[1]=randrow;
+                        pData.position[2]=pos;
+                        break;
+
+                    }
             }
+        }
+        void gamStep1(){
+            worldGeneration();
+            spawn();
         }
 };
 
-int main(int argc, char *argv[]){
+   int main(int argc, char *argv[]){
     iGD initial;
     numberGen numGen;
     roomGen rmGen;
     worldData wData;
     worldGen wrldGen;
-    
-    //generates the world
-    initial.worldGeneration();
-    initial.spawn();
-
+    initial.gamStep1();
     return 0;
 }
